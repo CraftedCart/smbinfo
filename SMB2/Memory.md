@@ -37,7 +37,7 @@ Memory Addresses
 - `805E9510`: Flash pos? (Int32)
 - `805E9538`: Ball angle (Short16)
 
-## After Restart
+## Timer After Restart
 
 - `805E93F8`: Ball red (Byte8)
 - `805E93F9`: Ball green (Byte8)
