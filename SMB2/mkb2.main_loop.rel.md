@@ -4,6 +4,7 @@ mkb2.main_loop.rel Addresses
 - `2023BC`: Ball acceleration constant (Float)
 - `2023B8`: Ball radius (Float | Default 0.5)
 - `2023C0`: Ball restitution (Float | Default 0.5)
+- `174778`: Ball visual size
 - `16E738`: Music list (More info: https://pastebin.com/M0GwVTAf)
 - `1E5298`: Lighting data (Detailed below)
 - `204E48`: Stage theme list (421 themes, starting at index 0 | Theme IDs here: https://pastebin.com/WAJ9vHWa)
