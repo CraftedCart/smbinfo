@@ -1,5 +1,6 @@
 mkb2.main_loop.rel Addresses
 ============================
+## Loaded into `80270100` in memory
 
 - `2023BC`: Ball acceleration constant (Float)
 - `2023B8`: Ball radius (Float | Default 0.5)
