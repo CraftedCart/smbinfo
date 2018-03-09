@@ -4,14 +4,8 @@ Memory Addresses
 - `805BC470`: DIP switches (32 bit bitmask)
 - `805BCA1C`: Score (Int32)
 - `80553974`: Timer (Signed Short16)
-- `805BC9BC`: X-Velocity (Float32)
-- `805BC9C0`: Y-Velocity (Float32)
-- `805BC9C4`: Z-Velocity (Float32)
 - `80446C20`: Monkey Visibility (Byte?)
 - `80145120`: Button Input (32 bit bitmask)
-- `805BC9A4`: X-Position (Float32)
-- `805BC9A8`: Y-Position (Float32)
-- `805BC9AC`: Z-Position (Float32)
 - `8055399C`: Next Level (Computed on goal) (Short16)
 - `80553991`: Current Level (First byte) (Byte)
 - `8054E058`: Camera camx (Float32)
@@ -25,7 +19,33 @@ Memory Addresses
 - `8054E074`: Camera angz (Short16)
 - `804724BC`: Ball acceleration per frame (Float32)
 - `804724C0`: Ball bounce restitution (How much energy is lost in a collision | Float32)
-- `804724B8`: Physical ball size (Float32)
+- `804724B8`: Physical Ball Size (Float32)
+- `803E4878`: Visual Ball Size (Float32)
+
+## Monkey Struct offsets
+
+- `805BC9A0`: Monkey 0 struct start - main player
+- `805BCB50`: Monkey 1 struct start
+- `805BCD00`: Monkey 2 struct start
+- `805BCEB0`: Monkey 3 struct start
+- `805BD060`: Monkey 4 struct start
+- `805BD210`: Monkey 5 struct start
+- `805BD3C0`: Monkey 6 struct start
+- `805BD570`: Monkey 7 struct start
+
+### Relative Offsets
+
+- `0x0`: Is Active? (Byte)
+- `0x4`: X-Position (Float32)
+- `0x8`: Y-Position (Float32)
+- `0xC`: Z-Position (Float32)
+- `0x24`: X-Velocity (Float32)
+- `0x20`: Y-Velocity (Float32)
+- `0x1C`: Z-Velocity (Float32)
+- `0x68`: Ball Physical Size (Float32)
+- `0x6C`: Acceleration (Float32)
+- `0x70`: Restitution (Float32)
+- `0x74`: Ball Visual Scale (Float32)
 
 ## Timer Pre Restart
 
