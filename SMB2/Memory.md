@@ -2,7 +2,6 @@ Memory Addresses
 ================
 
 - `805BC470`: DIP switches (32 bit bitmask)
-- `805BCA1C`: Score (Int32)
 - `80553974`: Timer (Signed Short16)
 - `80446C20`: Monkey Visibility (Byte?)
 - `80145120`: Button Input (32 bit bitmask)
@@ -32,20 +31,6 @@ Memory Addresses
 - `805BD210`: Monkey 5 struct start
 - `805BD3C0`: Monkey 6 struct start
 - `805BD570`: Monkey 7 struct start
-
-### Relative Offsets
-
-- `0x0`: Is Active? (Byte)
-- `0x4`: X-Position (Float32)
-- `0x8`: Y-Position (Float32)
-- `0xC`: Z-Position (Float32)
-- `0x24`: X-Velocity (Float32)
-- `0x20`: Y-Velocity (Float32)
-- `0x1C`: Z-Velocity (Float32)
-- `0x68`: Ball Physical Size (Float32)
-- `0x6C`: Acceleration (Float32)
-- `0x70`: Restitution (Float32)
-- `0x74`: Ball Visual Scale (Float32)
 
 ## Timer Pre Restart
 
