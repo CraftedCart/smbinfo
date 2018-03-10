@@ -2,8 +2,6 @@
 
 Offsets for data contained within each of the 8 ball structs, relative to the start of the struct.
 
-### Relative Offsets
-
 - `0x0`: Is Active? (Byte)
 - `0x1`: Unknown (Byte)
 - `0x2`: Unknown (Byte)
