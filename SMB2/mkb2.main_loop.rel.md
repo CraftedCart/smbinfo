@@ -14,6 +14,7 @@ mkb2.main_loop.rel Addresses
 ## Other curiosities
 
 - Modifying `27438` to `60000000` makes the timer infinite
+- Modifying `40210` sets the dipswitch. `38000003` for debug
 
 ## Lighting data
 
