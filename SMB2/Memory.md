@@ -20,6 +20,8 @@ Memory Addresses
 - `804724C0`: Ball bounce restitution (How much energy is lost in a collision | Float32)
 - `804724B8`: Physical Ball Size (Float32)
 - `803E4878`: Visual Ball Size (Float32)
+- `805D48F8`: Start of unlock entries for levels of challenge mode (Sequence of bytes)
+- `8061ABC0`: Where save file is loaded
 
 ## Monkey Struct offsets
 
