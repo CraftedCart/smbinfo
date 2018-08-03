@@ -7,6 +7,7 @@ Memory Addresses
 - `80145120`: Button Input (32 bit bitmask)
 - `8055399C`: Next Level (Computed on goal) (Short16)
 - `80553991`: Current Level (First byte) (Byte)
+- `8055399E`: Current stage id (Short16)
 - `8054E058`: Camera camx (Float32)
 - `8054E05C`: Camera camy (Float32)
 - `8054E060`: Camera camz (Float32)
@@ -21,6 +22,33 @@ Memory Addresses
 - `804724B8`: Physical Ball Size (Float32)
 - `803E4878`: Visual Ball Size (Float32)
 - `805D48F8`: Start of unlock entries for levels of challenge mode (Sequence of bytes) (loaded at least in most of main menu and challenge mode)
+- `804C3F70`: Pointer to special struct (8062a294 at least in main menu)
+  * Struct at 0x1: Max number of lives you could start with (if 3, menu for selecting number of lives doesn't show up)
+  * Struct at 0x4: Number of play points
+- `805D490C`: 0x1C plus the location of the current cm entry (Word32)
+- `805D4910`: Stores jump distance at some points (Word32)
+- `80553992`: Also stores jump distance at some points (Word32)
+- `80553970`: A special bit field that tells us some state about Challenge Mode, like whether we have entered a goal (read function 80313660 for more details)
+- `805D4914`: Seems to store which mode we are in. 0x1 if Practice Mode (Word32)
+- `805D4918`: Level number in Practice Mode (Word16)
+- `805D491A`: Practice Mode difficulty indicator value (Word16)
+- `805D491C`: Practice Mode difficulty indicator bit field (Word32)
+- `8054DC44`: Difficulty Indicator value when a set of levels is started (Word32)
+- `8054DC48`: Difficulty Indicator bit field when a set of levels is started (Word32)
+
+## Difficulty Indicators
+
+If 8th bit of bit field is set, we are in Master Extra
+
+If 27th bit of bit field is set, we are in Master
+
+If 28th bit of bit field is set, we are in the Extra stage of a difficulty
+
+If value is 0, we are in Beginner
+
+If value is 1, Advanced
+
+If value is 2, Expert
 
 ## Monkey Struct offsets
 
