@@ -35,6 +35,20 @@ Memory Addresses
 - `805D491C`: Practice Mode difficulty indicator bit field (Word32)
 - `8054DC44`: Difficulty Indicator value when a set of levels is started (Word32)
 - `8054DC48`: Difficulty Indicator bit field when a set of levels is started (Word32)
+- `803DDE18`: Value related to camera turn rate and level tilt
+- `803DDE74`: Camera near clipping Z
+- `803DDE78`: Camera far clipping Z
+- `803DDE98`: Camera FOV (Double?)
+- `803DDEA8`: cameraAng - targetCameraAng multiplier (Double) - Setting this higher makes the camera turn far less, and setting it lower makes the camera constantly turn at the max turn rate until it reaches the goal angle
+- `803DDEC0`: Camera height (Relative to ball) (Double)
+- `803DDED0`: Camera distance from ball (Double)
+- `803DD600`: Beginning of constants listing
+- `803DD6B0`: On-screen draw size of the pause menu framebuffer (https://media.discordapp.net/attachments/375039021442662400/474455418031177749/unknown.png / https://media.discordapp.net/attachments/375039021442662400/474455476109574145/unknown.png)
+- `803DDC18 - 803DDDDC`: Large section of strings
+- `802915F4`: Camera currentAngle - targetAngle multiplier is read here
+- `8028353C`: Calls to the main camera
+- `80291470`: Main camera function
+- `8054E076`: One byte representing camera state (1 (dec) = SMB 1 style camera, 75 (dec) = SMB 2 style camera, and there's a lot more (everything from 1 to about 105 - a few are duplicates))
 
 ## Difficulty Indicators
 
