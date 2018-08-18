@@ -64,16 +64,16 @@ If value is 1, Advanced
 
 If value is 2, Expert
 
-## Monkey Struct offsets
+## Ball Struct offsets
 
-- `805BC9A0`: Monkey 0 struct start - main player
-- `805BCB50`: Monkey 1 struct start
-- `805BCD00`: Monkey 2 struct start
-- `805BCEB0`: Monkey 3 struct start
-- `805BD060`: Monkey 4 struct start
-- `805BD210`: Monkey 5 struct start
-- `805BD3C0`: Monkey 6 struct start
-- `805BD570`: Monkey 7 struct start
+- `805BC9A0`: Player 0 struct start - main player
+- `805BCB50`: Player 1 struct start
+- `805BCD00`: Player 2 struct start
+- `805BCEB0`: Player 3 struct start
+- `805BD060`: Player 4 struct start
+- `805BD210`: Player 5 struct start
+- `805BD3C0`: Player 6 struct start
+- `805BD570`: Player 7 struct start
 
 ## Timer Pre Restart
 
