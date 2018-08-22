@@ -23,6 +23,7 @@ Memory Addresses
 - `803E4878`: Visual Ball Size (Float32)
 - `805D48F8`: Start of unlock entries for levels of challenge mode (Sequence of bytes) (loaded at least in most of main menu and challenge mode)
 - `804C3F70`: Pointer to special struct (8062a294 at least in main menu)
+  * Struct at 0x0: Whether Master is unlocked
   * Struct at 0x1: Max number of lives you could start with (if 3, menu for selecting number of lives doesn't show up)
   * Struct at 0x4: Number of play points
 - `805D490C`: 0x1C plus the location of the current cm entry (Word32)
