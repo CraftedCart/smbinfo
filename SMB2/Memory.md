@@ -53,11 +53,13 @@ Memory Addresses
 
 ## Difficulty Indicators
 
-If 8th bit of bit field is set, we are in Master Extra
+If 6th bit of bit field is set, we selected Master from main menu
 
-If 27th bit of bit field is set, we are in Master
+If 8th bit of bit field is set, we are playing Master Extra
 
-If 28th bit of bit field is set, we are in the Extra stage of a difficulty
+If 27th bit of bit field is set, we are playing Master
+
+If 28th bit of bit field is set, we are playing the Extra stages of a difficulty
 
 If value is 0, we are in Beginner
 
