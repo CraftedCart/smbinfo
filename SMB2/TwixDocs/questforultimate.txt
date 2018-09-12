@@ -1,0 +1,76 @@
+
+Places that write bit field
+808f629c-808f62a8 wrote bits 8, 25
+
+
+Function 80902754 (in selngc) has a few important things 
+809028a8-28b0 stores the current value
+809028d4-809028e0 removes the 8th, 27th, 28th bits
+
+Function 808f8d9c (loaded when playing game)
+Instruction 808f8e48 sets the Extra bit (28th bit) 
+^ After beating Beginner, Advanced, Expert
+Instruction 808f8e20-8e24 sets Master bit (27th bit)
+Instruction 808f8df4-8df8 sets Master Extra bit (8th bit)
+
+Function 808f5bc4
+Instructions 808f62a0-62a4 sets 11th bit and 25th bit
+^ Called after beating Beginner Extra and Advanced Extra and every difficulty
+Instruction 61bc reads Extra bit
+
+Address 8054df28 also stores diff indicator value (Byte)
+
+21st bit means we didn't enter goal?
+22nd bit means credits or something? 
+29th bit is main menu? Or complete difficulty
+
+
+Master bit set again when we complete Master 
+Extra bit set again when we complete Expert Extra and Master
+
+
+6184 checks something too
+
+61b4-61dc seems to check whether we have beaten Expert Extra
+Replace 61d8 with 0x2C000000 to see if that sends us to Master at the end of Beginner
+No!
+
+808f61d8 is 21f8 in main_game REL
+
+Uhh, check to see more interactions with diff ind value
+Find out when 808f8d9c is called
+
+
+Memory at 808f5bdc
+3c600000 38630000 80030000 7000000a 
+28000000 40820728 3c600000 38630000
+80630000 88030003 7c000774 2c000020
+
+
+main_game is loaded at 808f3fe0
+
+
+Read/writes for bit field
+8033a7b4-a7b8 checks Master bit
+8033061c/3c (function 803305ec) check Master Extra bit and Master bit respectively
+
+
+The functions
+808f8d9c -> Changes the difficulty indicators
+808f5bc4 -> Whether we go to another course
+803305ec -> Whether to display Go to Extra/Master/Master extra stage
+
+
+Note that we now have the 6th bit indicate Ultimate Mode
+
+
+Function 803dc5b0 references byte at 0x0000 in the struct 804c3f70 points to
+Function 803dc598 sets byte at 0x0000 in struct to 1
+That byte tells us whether or not we unlocked Master
+
+
+6th bit stores whether or not we selected Master from the menu
+
+Can change text to say Ultimate. It's at 2265f8 in main loop. We have space!
+
+Also at 241f44, but not enough space. This one is probably for ranking menu

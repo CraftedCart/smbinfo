@@ -1,0 +1,4 @@
+
+803132c8 at stage 1
+803133cc upon stage clear, twice
+80313950 on stage arrival (discards it?)

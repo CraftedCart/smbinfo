@@ -1,0 +1,148 @@
+
+Function 803133cc
+33cc-33e0 -> Function setup
+33e4-33ec -> Load word from 805bc474 into r0
+^ The word after debug word
+33f0 -> r0 = r0 & 0x0000000A
+33f4-33f8 -> Go to 3640 if r0 is not 0x00000000
+
+33fc-3400 -> r3 = 805d490c
+3404 -> Load word from address r3 has and put it into r30
+3408 -> r3 = -1
+340c -> r31 = 0
+3410 -> go to 3634
+
+3414 -> Deference byte at current entry pointer r30
+3418-341c -> Go to 342c if it's not equal to 0x02
+3420 -> Deference next byte after current entry pointer r30
+3424-3428 -> Go to 3640 if equal to 0x00
+^3414-3428 go to end if at current entry pointer is 0200
+
+342c -> Dereference byte from current entry pointer r30
+3430 -> Compare it with 0x01
+3434 -> Go to 34b0 if equal to 0x01
+3438 -> Go to 34dc if greater than or equal to 0x01
+
+343c -> Compare 342c byte with 0x00
+3440 -> Go to 3448 if greater or equal to 0x00
+3444 -> Else, 34dc
+
+^ 3448 is reached if byte pointed to by r30 is 0x00
+3448-344c -> Go to 347c if r3 is equal to 0x00
+3450 -> r3 = r30
+3454 -> Dereference second byte from current entry pointer and put it in r0
+3458 -> r5 = r0 << 2
+345c-3460 -> r0 = 0x80477690
+^ At 80477690: 80313660 8031376c 80313704 00000000
+3464 -> r4 = r0 + r5
+3468 -> r12 is word at address r4 has
+346c-3470 -> Jump to address r12 has
+3474 -> r31 = r3
+3478 -> Go to 34dc
+
+347c-3480 -> Go to 34dc if r31 is equal to zero
+3484 -> r3 = r30
+3488-34a4 -> Does exactly what 3454-3470 does
+34a8 -> r31 = r31 & r3
+34ac -> Go to 34dc
+
+^ 34b0 is reached if byte referenced by entry pointer is 0x01
+34b0-34b4 -> Go to 34dc if r31 is equal to zero
+34b8 -> r3 = r30
+34bc-34d8 -> Does what 3454-3470 does, but jump table is at 804776A0
+^ At 804776A0: 80313790 803137f4 80313808 00000000
+
+34dc-34e0 -> r3 = 805d4910
+34e4 -> Load word from 805d4910 into r0
+34e8-34ec -> Go to 362c if r0 = -1
+^ That is, next iteration if we didn't go through goal yet
+
+34f0 -> r31 = 0
+34f4 -> r29 = 0
+34f8-34fc -> r3 = 80553970
+3500 -> r0 = ext halfword at 80553992
+^ 80553992 seems to also store jump distance
+3504-3508 -> Go to 3564 if r0 = 1
+
+350c-3514 -> r0 = ext halfword at 80553992
+3518-3520 -> Store r0 into 805d4910
+3524 -> Go to 3564
+
+3528 -> r0 = byte [r30]
+352c-3530 -> Go to 3560 if r0 != 2
+3534 -> r0 = byte [r30+0x1]
+3538-353c -> Go to 3560 if r0 != 0
+3540 -> r29 = r29 + 1
+3544-354c -> r0 = word from 805d4910
+3550-3554 -> Go to 3560 if r29 != r0
+3558-355c -> r31 = 1 and go to 3570
+3560 -> r30 = r30 + 28
+3564 -> r0 = byte [r30]
+3568-356c -> Go to 3528 if r0 != 0x03
+^ Makes r30 hold pointer to start of next level entry
+^ r31 = 1 if we didn't hit the end of entries
+
+3570-3574 -> Go to 358c if r31=0
+
+3578 -> r0 = r30 + 28
+357c-3580 -> r3 = 805d490c
+3584 -> word [805d490c] = r0
+3588 -> Go to 35bc
+
+358c -> r3 = r30
+3590 -> Branch 80313808 (this is function that sets 8055399e to -1)
+3594-35a4 -> half at 80553990 = 10 + half at 80553990
+35a8-35b4 -> Store word -1 at 805d4910
+35b8 -> Go to 3640
+^ Doesn't seem to be reached, UNLESS we mess up the last stage entry! Huh? I mean, whadda heck?
+
+35bc-35c0 -> r0 = ext half [r30 + 0x5]
+35c4-35cc -> half at 8055399e = r0
+^ 8055399e will hold id of next entry
+35d0 -> Branch to 803146e0
+^ Nice! Mystery function!
+35d4 -> r0 = extsh r29
+35d8-35e0 -> half at 80553992 = r0
+35e4-35ec -> r0 = word at 8054dc68
+35f0-35f4 -> Go to 3618 if r0 == 2
+
+35f8-3600 -> r4 = ext half at 80553990
+3604-360c -> r0 = ext half at 80553992
+3610-3614 -> half at 80553990 = r0 + r4
+
+3618-3624 -> word at 805d4910 = -1
+3628 -> Go to 3640
+
+
+362c -> r3 = byte [ r30 ]
+
+3630 -> r30 = r30 + 28
+
+3634 -> Get entry byte at address r30 has
+3638-363c -> Go to 3414 if not equal to 0x03
+
+3640-3654 -> Clean up!
+3658 -> blr
+365c -> blr
+
+Thoughts: 
+Why are there two places that use bctrl if first entry byte is 0x00
+The block that is used depends on what r3 is at the beginning of the body of the loop
+If r3 = 0, we use second block, that first checks if r31 != 0, and does r31 = r31 & res if so; else, r31 = res
+
+No, r3=-1 at first iteration. Instruction 362c sets r3 to be the first byte of the previous entry mode
+So we `and` results as long as previously we saw 0x00
+This means 00 01 results in allowing different jump distances if you get to goals at different times!
+
+
+Conclusion:
+This function figures out how many stages we warp upon goal entry. It then updates stage ids and level numbers based on it.
+
+It also gives us an important insight into the structure of the cm entries. See cmEntryFormat.txt for more info
+
+
+Mystery addresses
+805bc474
+80553970
+80553992
+8054dc68

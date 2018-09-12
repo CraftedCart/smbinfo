@@ -1,0 +1,34 @@
+
+Function 80313a78
+^^ This function calculates what word in the RAM offset table is for the current difficulty
+^3a78 -> r5 = 0
+
+^3a7c-3a84 -> Go to 3a90 if 8th bit of r4 is zero
+^^ I think 8th bit means Master Extra
+^3a88-3a8c -> r3 = 7 and go to 3ad4
+
+^3a90-3a98 -> Go to 3aa4 if 27th bit is zero
+^^ Master is 27th bit?
+^3a9c-3aa0 -> r3 = 6 and go to 3ad4
+
+^3aa4-3aac -> Go to 3ab4 if 28th bit is zero
+^^ 28th bit indicates Extra
+^3ab0 -> r5 = 3
+
+^3ab4-3ab8 -> r4 = 805D4914
+^3abc-3ac4 -> Go to 3acc if word at 805D4914 is zero
+^3ac8 -> r5 = 9
+^^ That should be the number of the unused difficulty
+^^ Later code seems to suggest multiple unused difficulties
+
+^3acc -> r5 = r5 + r3
+^3ad0 -> r3 = r5
+^3ad4 -> blr
+
+^ This function turns the difficulty into a number so that 0x8047b4ec + 4*a contains a pointer to the first entry of difficulty
+^ It turns your difficulty to an offset of the cm difficulty list
+^ Input:
+^^ r3 is a number indicating Beginner, Advanced, or Expert (Master will be zero)
+^^ r4 is a bit field containing whether we are in Extra stages, Master, or in Master Extra
+^ Output: r3 is the offset
+Note: It uses registers r0, r3, r4, r5

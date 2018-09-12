@@ -1,0 +1,36 @@
+
+How about jump distance?
+
+When jump distance data is read...
+Not a jump distance slot
+80314548 (func 80314308)
+
+Jump distance slot
+Same
+
+When I enter a goal on a jump distance slot, it is also read at
+803137e0 (8 bytes after jump distance code) (read twice on green and red goal)
+At func 80313790
+
+805d4910 stores the jump distance!
+
+Messing with final stage entries
+If you change jump distance on last stage entry, we're alright
+Doesn't seem to affect things if you change 0102 to 0100
+
+805d4910 holds -1 when we didn't enter goal
+
+805d4910 written at
+3378 (Func something) (writes -1)
+37c8 (Func 3790) (writes normal jump distance)
+37ec (Func 3790) (writes entry jump distance)
+3624 (Func 33cc) (writes -1)
+
+80553992 also holds jump distance at some point.
+If goal not entered, it holds 0x01?
+Written at 35e0, where it gets jump distance of goal entered
+Also written at 80297974, where it gets 0x01
+Also written at 80003468, where it get mystery value that might clear it?
+
+
+See func 803133cc and cmEntryFormat.txt for more info

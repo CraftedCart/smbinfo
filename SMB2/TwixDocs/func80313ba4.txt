@@ -1,0 +1,68 @@
+
+Function 80313ba4
+
+3ba4-3bac -> Load word from 805d4914
+^ Practice Mode word
+3bb0-3bb4 -> Jump to 3bc8 if it equals 0
+
+3bb8-3bc0 -> r6 = word from 805d4948
+3bc4 -> Go to 3c68
+
+
+3bc8 -> r6 = 0
+3bcc -> r7 = 0
+
+3bd0 -> r0 = r5 & 0x00800000 (8th bit)
+3bd4-3bd8 -> Go to 3be4 if r0 = 0
+3bdc -> r7 = 7
+3be0 -> Go to 3c24
+
+3be4 -> r0 = r5 & 0x00000010 (27th bit)
+3be8-3bec -> Go to 3bf8 if r0 = 0
+3bf0 -> r7 = 6
+3bf4 -> Go to 3c24
+
+3bf8 -> r0 = r5 & 0x00000008 (28th bit)
+3bfc-3c00 -> Go to 3c08 if r0 = 0
+3c04 -> r7 = 3
+
+3c08-3c10 -> Load word from 805d4914
+3c14-3c18 -> Go to 3c20 if equal to 0
+3c1c -> r7 = 9
+
+3c20 -> r7 = r7 + r3
+^ r3 contains whether we are in Beginner, Advanced, Expert
+^ r7 now contains which offset from difficulty pointer table to use
+3c24 -> r5 = 4*r7
+3c28-3c2c -> r0 = 0x8047b4ec
+3c30 -> r3 = r0 + r5
+3c34 -> r3 = word [r3]
+^ r3 now contains the pointer to the first entry in the difficulty
+3c38 -> Jump to 3c5c
+
+
+3c3c -> r0 = byte [r3]
+3c40-3c44 -> Go to 3c58 if r0 not equal to 0x2
+3c48 -> r0 = byte [r3+0x0001]
+3c4c-3c50 -> Go to 3c58 if r0 not equal to 0x0
+3c54 -> r6 = r6 + 1
+
+3c58 -> r3 = r3 + 0x1C
+3c5c -> r0 = byte [r3]
+3c60-3c64 -> Go to 3c3c if not equal to 0x3
+
+
+3c68-3c6c -> Go to 3c78 if r4 = r6
+3c70 -> r3 = 1
+3c74 -> Jump to 3c7c
+3c78 -> r3 = 0
+3c7c -> blr
+
+Conclusion: 
+This checks to see r4 is the length of the difficulty, i.e. the number of cm entries in the difficulty
+This probably checks to see if we are on the final level
+
+
+
+Mystery addresses
+805d4948 - Seems to hold some notion of length of difficulty, if set

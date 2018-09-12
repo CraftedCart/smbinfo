@@ -1,0 +1,11 @@
+
+
+Function 80314ef0
+Loads the stage id for the (r4+1)th level of the (r3+1)th world into r3
+8047b6d8 is a list of pointers to worlds
+
+Function 80314f10
+Loads difficulty for " " " ...
+
+Function 803153c0
+Decides what time to give the level (to r3)

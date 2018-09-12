@@ -1,0 +1,51 @@
+
+Functions that call challenge mode entries
+
+Main menu (before selecting challenge mode and in main game menu)
+80313F24 (at 80314098, 803140a4, 803140b8)
+
+Challenge mode (loading level)
+Function 803132c8 (at 8031331c)
+^ Calls 3a78 (time.txt documents most of it)
+^ Seems to be finding stage id here
+^ Also calculates entry pointer
+^ For first stage
+Function 80313950 (at 3a00, 3968, 3a18, etc.)
+^ This puts the current entry address plus 0x1C into 805d490c
+^ Also gets stage id, but doesn't seem to be used
+Function 8031381c
+^ This get the time
+Function 80313ba4 (at 3c5c, 3c3c, 3c48) (reads entries it isn't supposed to) (doesn't read stage id  of entries it isn't supposed to)
+^ Checks to see if we are on the final stage
+^ Also works with Practice Mode
+Function 80314308 (at 45f0, 44fc, 4514, 4520, 4548, 455c, 45a4, 4574) 
+(we think that this is debug stuff?)
+(and it is!)
+
+Functions 80313950,8031381c,8031381c,80314308 are called between levels
+
+During play
+Function 803133cc (at 3634, 3414, 342c, 362c, 3454) (function 3660 seems important?)
+(reads next level entry upon goal entry and then loops forever)
+(reads next stage id upon prev level clear)
+
+At goal
+803133cc
+80313790 (calculates jump distance?)
+
+
+When selecting stage in practice mode
+80313ad8
+80313e5c
+
+Helpers
+80313a78
+
+
+
+I know more!
+8054dc44 - 0 for Beginner pair, 1 for Advanced pair, 2 for Expert pair
+8054dc48 - bit mask that says Master, Master Extra, or Extras
+805d4914 - We thought that this was an unused difficulty, but it's Practice Mode
+There seems to be an Beginner Unused, Advanced Unused, Expert Unused.
+8047b538 - where CLEAR is stored. 

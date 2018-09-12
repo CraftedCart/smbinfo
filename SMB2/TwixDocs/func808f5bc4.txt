@@ -1,0 +1,61 @@
+
+Function 808f5bc4
+
+6178 -> r4 = 0
+617c-6188 -> Get 31st bit of indicator bit field
+618c-6190 -> Go to 61ac if equal to zero
+
+6194-619c -> Get alg half word from 8055399a
+61a0-61a4 -> Go to 61ac if not equal to zero
+
+61a8 -> r4 = 1
+
+61ac-61b0 -> Go to 61e4 if r4 = 0
+
+61b4-61c0 -> Get Extra bit of ind
+61c4-61c8 -> Go to 61e4 if equal to zero
+
+61cc-61d4 -> Get ind value
+61d8-61dc -> Go to 61e4 if 2 (traditionally for Expert/Expert Extra)
+
+61e0 -> r4 = 0
+
+
+^ 61ac-61e0 -> r4 is set to zero if we are in a "non-Expert" Extra course
+
+
+61e4-61e8 -> Go to 621c if r4 equals zero
+
+61ec-61f8 -> Get Master bit of ind
+61fc-6200 -> Go to 621c if equal to zero
+
+6204-620c -> Get ind value
+6210-6214 -> Go to 621c if equal to 2
+
+6218 -> r4 = 0
+
+
+^ 61ec-6218 -> r4 is set to zero if the Master bit is set and val doesn't equal 2
+
+
+621c-6220 -> Go to 6240 if r4 equals zero
+
+6224-6230 -> Get Master Extra bit
+6234-6238 -> Go to 6240 if r4 = 0
+
+623c -> r4 = 0
+
+6240-6244 -> Go to 625c if r4 = 0
+
+6248-6254 -> word [0x8054dc3c] = 74 (decimal)
+6258 -> Go to 6318
+
+625c-6304 -> Magic
+6308-6314 -> word [0x8054dc3c] = 48
+
+6318-6330 -> Cleanup and blr
+
+
+^ Conclusion: r4 = 1 if we go to another course, and 0 if not
+^ Ex: r4 = 1 if we are in Beginner since we can go to the Extras, but r4 = 0 if we are in Beginner Extra since there are no levels after it
+^ Modify 6178-623c to set r4

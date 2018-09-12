@@ -1,0 +1,27 @@
+
+Function 8031381C
+
+^381c - 3820 -> Load 805d48f8 into r3
+^3824 - 3828 -> Check if word at 805d4914 is 0
+^3828 -> If so, go to 391c
+
+^382c-3918 -> If we are in Practice Mode, calculates time in some way in which I forgot. Go look at it for yourself
+
+^391c -> Load word from 805d490c into r4
+^^** - This word should be the address to the potential time data
+^3920 -> Load first byte of time data
+^3924 -> Is it 2?
+^3928 -> If not, go to 3948
+^392c -> Load time data address
+^3930 -> Load second byte of time data
+^3934 -> Is it 1?
+^3938 -> If not, go to 3948
+^393c -> Load time data address
+^3940 -> Fetch last four bytes of it and put it into r3
+^3944 -> Go to 394c
+
+^3948 -> Put 60 seconds into r3
+
+^394c -> blr
+
+Conclusion: This function gets the time allotted

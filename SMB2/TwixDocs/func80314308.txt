@@ -1,0 +1,192 @@
+
+Function 80314308
+4308-431c -> Stack stuff
+4320-4324 -> r3 = 0x8054dc40
+4328 -> Load word from address 0x8054dc6c into r30
+^ 0x8054dc68 seen in time.txt at func 3950 at 3a24
+432c-4330 -> r3 = 0x8054dc40
+4334 -> Load word from address 0x8054dc68 into r0
+4338-433c -> Go to 4348 if r0 != 0
+
+4340 -> Call func 80272990
+4344 -> Go to 4354
+
+4348-434c -> r3 = 0x8054dc40
+4350 -> Load word from address 0x8054dc6c into r3
+
+4354-4358 -> r3 = 80553970
+435c -> r5 = half-word at 80553990
+^ 80553990 is current level number (not stage id) 
+4360 -> r4 = 108*r30
+4364-4368 -> r0 = 805d494c
+436c-4370 -> r0 = word at r0+r4
+^ r0 = word at (805d494c + (108 * word at 8054dc6c))
+4374-4378 -> go to 4438 if r5 != r0
+^805d494c and more bytes seem to be words of 0x0 and 0xFFFFFFFF (8 groups of these bytes?)
+^When are they ever gonna be unequal?
+
+437c-4434 -> Stuff that seems to be unimportant for what we want
+
+4438 -> r31 = 1
+443c -> r4 = 108 * r30
+4440-4444 -> r0 = 0x805d494c
+4448 -> r3 = r0+r4
+444c -> r0 = 36 * r31
+4450 -> r29 = r3 + r0
+^ r29 = 0x805d494c + 0x24 + 108 * r30
+4454 -> go to 447c
+
+4458 -> r0 = word from address at r29
+445c-4460 -> Go to 4474 if r0 = 0
+
+4464 -> r3 = r29 + 0x24
+4468 -> r4 = r29
+446c -> r5 = 36
+4470 -> Call 8000AB6C
+
+4474 -> r31 = r31 - 1
+4478 -> r29 = r29 - 36
+
+447c-4480 -> go to 4458 if r31 >= 0
+
+4484 ->  r4 = r30 * 108
+4488-448c -> r0 = 805d494c
+4490 -> r29 = r0 + r4
+^ r29 = 805d494c + 108 * r30
+4494-4498 -> r3 = 80553970
+449c -> r0 = half-word at 80553990
+44a0 -> store r0 at address of r29
+44a4-44a8 -> r3 = 805bca0c
+44ac -> r0 = half-word at 805bca0c
+^ Seems to be current stage id
+44b0 -> store r0 at 0x4 + address of r29
+
+44b4 -> r31 = 0
+44b8 -> go to 44e0
+
+44bc -> r4 = 0
+44c0 -> r0 = r31 << 3
+44c4 -> r3 = r29 + r0
+^ r3 = r29 + 8 * r31
+44c8 -> store r4 into 0x8 + address of r3
+^ store 0 at address r29 + (r31 << 3) + 0x8
+44cc-44d8 -> store -1 at address r9 + (r31 << 3) + 
+
+44dc -> r31 = r31 + 1
+
+44e0-44e4 -> Go to 44bc if r31 < 3
+^44b4 is a loop that puts 0's and -1's into rest of debug data at 0x805d494c
+
+
+^44e8-45f8 is the code that looks at entries, probably for jump distances. Look at it!
+
+
+44e8-44ec -> r3 = 805d490c
+^ Contains 0x1C plus address of current level entry
+44f0 -> r3 = time data address of current level entry
+44f4 -> r31 = 0
+44f8 -> Go to 45e8
+
+44fc-45e4 -> Looks at challenge mode entries
+
+44fc -> Deref first byte from entry position
+4500-4504 -> Go to 4514 if it's not 0x02
+
+4508 -> Deref second byte
+450c-4510 -> Go to 45fc if equal to 0x00
+
+4514 -> Deref first byte
+4518-451c -> Go to 45e4 if not equal to 0x01
+
+4520 -> Deref second byte
+4524-452c -> Go to 453c if less than or equal to 0x00
+4530-4534 -> Go to 453c if >= 3
+4538 -> Otherwise, go to 45c0
+
+453c-4544 -> Load byte from 80553990, that is, current level number
+4548 -> Load word from 0x4 plus entry pointer
+^ Probably jump distance
+454c -> r5 = r4 + r0
+^ Probably level that a goal sends you to
+4550-4554 -> r4 = r29 + 8 * r31
+4558 -> Store goal level number in address of r4
+455c -> Load jump distance word again into r6
+4560-4564 -> r4 = 805d490c
+4568 -> Load entry pointer into r4
+456c -> r5 = -1
+4570 -> Go to 45a4
+
+4574 -> Deference first byte of address of r4 into r0
+^ r4 is probably a entry pointer
+4578-457c -> Go to 45a0 if not equal 0x02
+
+4580 -> Deference second byte of address of r4
+4584-4588 -> Go to 45a0 if not equal 0x00
+
+458c -> r6 = r6 - 1
+4590-4594 -> Go to 45a0 if r6 > 0
+
+4598 -> r5 = deference 0x4 + r4 entry pointer
+459c -> Go to 45b0
+^ r4 is probably searching for correct level id
+
+45a0 -> r4 = r4 + 28
+45a4 -> Load byte at r4 entry pointer
+45a8-45ac -> Go to 4574 if byte is not equal to 0x03
+
+45b0-45b4 -> r4 = r29 + 8 * r31
+45b8 -> Store r5 at word at address of r4
+45bc -> Go to 45e0
+
+45c0-45dc -> Store -1 into addresses of (r29 + 8 * r31 + 0x8) and (r29 + 8 * r31 + 0xC)
+
+45e0 -> r31 = r31 + 1
+45e4 -> r3 = r3 + 28
+
+45e8-45ec -> Go to 45fc if r31 >= 3
+
+45f0 -> r0 = byte at address of r3
+45f4-45f8 -> go to 44fc if r0 != 3
+
+^As expected, 44fc-45f8 puts level nums and level ids that goals lead you to into 805d494c debug area
+
+^After 45f8, may or may not be important
+^ Doesn't read cm entries
+
+^ Conclusion: This functions calculates stuff for the debug menu, like what paths could be taken. This reads the cm entries to do this
+^ modify 44fc-45f8 to use new cm entries
+
+
+Function 80272990
+2990-2998 -> r3 = word from address 8054dc6c
+299c -> r5 = 0
+29a0 -> Go to 29dc
+
+29a4-29ac -> r3 = word from address 8054dc6c
+29b0 -> r0 = r3 + 1
+29b4 -> r0 = r5 + r0
+29b8 -> r3 = r0 & 0x3
+^ r3 = (r5 + @8054dc6c + 1) & 0x3
+29bc-29c0 -> r4 = 0x805bc480
+^ 0x805bc470 tells us if we have debug mode enabled
+29c4 -> r4 = word at 805bc48c
+^ in this trace, we get 805bc500, which holds 02 00 00 00
+29c8 -> r0 = byte at (r4 + r3)
+29cc -> byte extend r0
+29d0-29d4 -> branch to 802729e4 if r0 = 4
+
+29d8 -> r5 = r5 + 1
+
+29dc-29e0 -> branch to 29a4 if r5 < 4
+
+29e4 -> blr
+
+^Conclusion: Mystery function
+
+
+
+Mystery addresses
+805d494c - Level num/level id debug data
+8054dc6c
+8054dc68
+805bca0c

@@ -1,0 +1,62 @@
+
+Function 80313950
+- Challenge mode at Beginner, Sliders death
+^Goes to 3a78
+^^** This function calculates current difficulty basically
+^At least at 3a78, we have r4=0x00000305
+^3a7c-3aac - checks r4 bits. If bits 8,27,28 are set on r4, various things happen.
+^^Here, stuff doesn't happen and we go to 3ab4.
+^3a78-3ad0, we get r3=0 in challenge mode
+^Go back to 396c
+^396c - Here, we get r4=0, basically shifts result of 3a78 2 bits
+^** 3974 -> r0 = 8047b4ec, is start of RAM pointer table to challenge mode entries
+^** 3978 -> r3 = r0 + r4 = 0x8047b4ec + r4
+^^** r4 chooses what difficulty we are looking at! r3 is the offset to our difficulty
+^** 397c -> r0 = 0x804776B0, loads pointer to first entry of difficulty
+^3984 -> r3 = 0x805d490c
+^** At 805d490c is 80477918, 80477918 is five blocks past the current entry's stage id
+^^** 805d490c is directly after the level progress. It points to 0x1C + the current entry
+^** 3988 -> (0x805d490c) = r0 = 0x804776B0, changes pointer
+^398c -> r3 = 1
+^3990 -> go to 39ec
+
+
+^** Loop to get to the right entry
+
+^3994-39a0 -> Put first byte of entry into r0
+^39a4 -> Is first byte 2, that is, level entry or time portion?
+^39a8 -> If not, branch to 39d0
+^39ac - 39b8 -> Load +0x1 of current entry
+^39bc -> Is it zero?
+^39c0 -> If not, go to 39d0
+^39c4 -> Compare r3 and r31, that is, level number
+^39c8 -> If equal, go to 3a0c
+
+^39cc -> Increment r3, that is, level number
+^39d0-39e8 -> Add 0x1C to word at 0x805d490c
+^^ When we are at start of entry, sends us to potential time stuff
+
+^39ec -> compare r3 and r31
+^^** r31 is 8, the level number!
+^39f0 -> if r3 > r31, go to 3a0c
+
+^39f8 - 3a00 -> load first byte of current entry
+^3a04 -> is first byte three, that is, end of entries?
+^3a08 -> if not, branch to 3994
+
+^** We are at correct entry
+^3a0c - 3a18 -> load stage id word into r3
+^3a18 - 3a20 -> r4 = 0x8054dc40
+^3a24 -> r0 = word at 0x8054dc68
+^3a28 -> Is r0 equal to 0x00000001?
+^3a2c -> If not, go to 3a48
+
+^3a30-3a44 - checks if we have slots 126,127 and changes r3 accordingly
+^^ If r3 = 126, change to 116. Else if r3=127, r3 = 117
+
+^3a48-3a60 -> add 0x1C to word at 0x805d490c
+^3a64-3a70 -> Cleanup, cleanup, everybody clean up! Function call cleanup
+^3a74 - blr
+
+Conclusion: This function finds the current entry and adds 0x1C to its address
+
