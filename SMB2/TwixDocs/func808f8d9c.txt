@@ -1,0 +1,27 @@
+
+-- Uses Challenge Mode difficulty indicators
+
+Function 808f8d9c
+8d9c-8da4 -> Setup
+8da8-8db0 -> Load word from 805bc474 into ro
+8db4 -> r0 = r0 & 0x0000000A
+8db8-8dbc -> Go to 8f20 if r0 doesn't equal 0
+
+8dc0-8dcc -> Store 600 into 8054dc40
+8dd0-8de4 -> Go to 8dfc if Master bit of diff ind is 0
+
+8de8-8df8 -> Set Master Extra bit of diff ind
+
+8dfc-8e10 -> Go to 8e38 if Extra bit is 0
+
+8e14-8e24 -> Set Master bit of diff ind
+8e28 -> Branch to function 803dc5b0
+8e2c-8e30 -> Go to 8e38 if r3 doesn't equal 0
+
+8e34 -> Branch to function 803dc598
+
+8e38-8e48 -> Set Extra bit
+
+... ?
+
+^ Conclusion: This snippet calculates the next difficulty to go to

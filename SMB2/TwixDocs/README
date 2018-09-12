@@ -1,0 +1,8 @@
+
+This directory contains a lot of things about challenge mode entry stuff, Ultimate Mode stuff, etc. 
+
+Start from cmentries.txt and cmlvlprog.txt for the challenge mode entry stuff, and look at questforultimate.txt for the Ultimate Mode stuff
+
+If you want to know about where RELs overwrite parts of your code, look at func800104bc.txt and main_game_overwrites.txt and sel_ngc_overwrites.txt
+
+

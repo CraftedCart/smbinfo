@@ -1,0 +1,27 @@
+
+808f5bdc and 5be0 load 805bc474
+
+5bf4 and 5bf8 give us 805bd770
+
+Would be stored in table as 6fb94 and 70e90 respectively
+
+Entries to search for:
+XXXX0606
+0006fb94
+00040406
+0006fb94
+00140606
+00070e90
+00040406
+00070e90
+
+
+The REL table entry for 808f5bdc is at REL 0x7bb14
+
+First table entry for relevant instructions is 0x7a924
+^ 8096e904 in RAM
+
+First RAM address of relevant section is 808f40b8
+
+
+See func 800104bc for more info

@@ -1,0 +1,2 @@
+
+805bd980 seems to store current lz pointer

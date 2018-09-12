@@ -1,0 +1,292 @@
+
+Level progress
+
+At main menu before selecting challenge mode, there is a function that looks at challenge mode entries
+80313F24
+
+Function 8031417c
+^^ This function updates level progress on visiting a level in CM
+^^ Input: 
+^^ r3, r5 -> Difficulty indicators 
+^^ r4 -> Level number
+^^ Registers used: r0, r6, r7
+
+^417c -> r7 = 0
+
+^^We have r5 = 0x00000305, just like with 3a78
+^^This seems to be a global bit field which keeps track of difficulties and stuff
+^^Should be different in Master and Master Extra
+^4180-4184 -> Check if 8th bit of r5 is zero
+^4188 -> If so, branch to 4194
+^418c -> r7 = 130
+^4190 -> Go to 4228
+
+^4194-4198 -> Check if 27th bit of r5 is zero
+^419c -> If so, branch to 41a8
+^41a0 -> r7 = 120
+^41a4 -> go to 4228
+
+^41a8 - 41ac -> Check if 28th bit of r5 is zero
+^41b0 -> If so, branch to 41f0
+
+^41b4 -> Compare r3 and 1
+^41b8 -> Go to 41e0 if r3 = 1
+^41bc -> Go to 41cc if r3 >= 1
+
+^41c0 -> Compare r3 and 0
+^41c4 -> Go to 41d8 if r3 >= 0
+^41c8 -> Otherwise, branch to 4228
+
+^41cc -> Compare r3 and 3
+^41d0 -> Go to 4228 if r3 >= 3
+^41d4 -> Otherwise, go to 41e8
+
+^41d8-41dc -> r7=90 and go to 4228
+^41e0-41e4 -> r7=100 and go to 4228
+^41e8-41ec -> r7=110 and go to 4228
+
+^41f0 -> Compare r3 and 1
+^41f4 -> Go to 421c if r3=1
+^41f8 -> Go to 4208 if r3>=1
+
+^41fc -> Compare r3 and 0
+^4200 -> Go to 4214 if r3 >= 0
+^4204 -> Otherwise, go to 4228
+
+^4208 -> Compare r3 and 3
+^420c -> Go to 4228 if r3 >= 3
+^4210 -> Otherwise, go to 4224
+
+^4214-4218 -> r7=0 and go to 4228
+^421c-4220 -> r7=10 and go to 4228
+^4224 -> r7=40
+
+^^ r4 is the current level
+^4228-422c -> r7 = r4 + r7 - 1
+^^Bit to select is r7 currently
+^4230 -> r0 = r7 `div` 8
+^4234 -> r4 = addze r0
+^4238-423c -> r0 = 805d48f8
+^4240 -> r6 = r0 + r4
+^^ r6 is the address of the byte to change
+^4244 -> Load byte to change into r5
+^4248 -> r4 = 1
+^424c -> r0 = (r7 `div` 8) << 29
+^4250 -> Sets r3 to one iff last bit of r7 is 1
+^4254 -> r0 = r0 - r3
+^4258 -> r0 = r0 `rotL` 3
+^425c -> r0 = r0 + r3
+^4260 -> r0 = 1 << r0
+^4264 -> r0 = r5 | r0
+^4268 -> r0 = r0 & 0x000000ff
+^426c -> Store r0 into level progress bytes
+
+Conclusion: When we get challenge mode entries working, we are good
+^We could probably get rid of all of the difficulty to relevant first diff code
+
+^^ Note - 805d490c holds 0x1C past the next entry here
+
+
+
+
+Function 80313f24
+^ This function looks at cm entries and lvlprog bytes
+3f24-3f28 -> r6 = 805d48f8
+3f2c -> r7 = 0
+3f30-3f34 -> r8 = 805bc470
+^ Holds debug byte
+3f38 -> Load word at 805bc470 into r0
+3f3c -> r0 = r0 & 0x00000001
+3f40-3f44 -> Go to 3f68 if r0 = 0
+
+3f48-3f4c -> r8 = 805bc470
+3f50 -> Load debug word into r0
+3f54 -> r0 = r0 & 0x00001000
+3f58-3f5c -> Go to 3f68 if r0 = 0
+
+3f60 -> r3 = 1
+3f64 -> Go to 4174
+
+^3f68-400c is the lvlprog bit selection number stuff
+3f68 -> Get 8th bit of r5 (zero based indexing)
+3f6c-3f70 -> Go to 3f7c if not set
+
+3f74-3f78 -> r7=130 then go to 4010
+
+3f7c -> Get 27th bit of r5
+3f80-3f84 -> Go to 3f90 if not set
+
+3f88-3f8c -> r7=120 then go to 4010
+
+3f90 -> Get 28th bit of r5
+3f94-3f98 -> Go to 3fd8 if not set
+
+3f9c -> Compare r3, 1
+3fa0 -> Go to 3fc8 if r3 = 1
+3fa4 -> Go to 3fb4 if r3 >= 1
+
+3fa8 -> Compare r3, 0
+3fac -> Go to 3fc0 if r3 >= 0
+3fb0 -> Else, go to 4010
+
+3fb4 -> Compare r3, 3
+3fb8 -> Go to 4010 if r3 >= 3
+3fbc -> Else, go to 3fd0
+
+3fc0-3fc4 -> r7=90 then go to 4010
+
+3fc8-3fcc -> r7=100 then go to 4010
+
+3fd0-3fd4 -> r7=110 then go to 4010
+
+3fd8 -> Compare r3, 1
+3fdc -> Go to 4004 if r3 = 1
+3fe0 -> Go to 3ff0 if r3 >= 1
+
+3fe4 -> Compare r3, 0
+3fe8 -> Go to 3ffc if r3 >= 0
+3fec -> Else, go to 4010
+
+3ff0 -> Compare r3, 3
+3ff4 -> Go to 4010 if r3 >= 3
+3ff8 -> Else, go to 400c
+
+3ffc-4000 -> r7=0 then go to 4010
+
+4004-4008 -> r7=10 then go to 4010
+
+400c -> r7=40
+
+^r7 contains bit index of start of the difficultie's level progress bytes
+
+4010-4014 -> Go to 4128 if r4 != 0
+^ Here, we have r4 == 0
+
+4018 -> Load word at address 805d4914 into r0
+^ Recall 805d4914 tells us that we are in unused difficulty
+401c-4020 -> Go to 402c if it is zero
+
+4024 -> Load word at address 805d4948 into r8
+4028 -> Go to 40c4
+
+
+^402c-40c0 -> This finds the length of a difficulty and puts it into r8
+
+402c -> r8=0
+4030 -> r4=0
+4034 -> Get 8th bit of r5
+4038-403c -> Go to 4048 if not set
+
+4040-4044 -> r4=7 then go to 4080
+
+4048 -> Get 27th bit of r5
+404c-4050 -> Go to 405c if not set
+
+4054-4058 -> r4=6 then go to 4080
+
+405c -> Get 28th bit of r5
+4060-4064 -> Go to 406c if not set
+
+4068 -> r4=3
+
+406c -> Load word at address 805d4914
+4070-4074 -> Go to 407c if it's zero
+
+4078 -> r4=9
+
+407c -> r4 = r4 + r3
+^ r3 delineates BE, AD, EX
+
+^ r4 contains the index in the pointer table for the difficulty to select
+
+4080-408c -> r3 = 8047b4ec + 4*r4
+4090 -> Load word at r3 into r3
+^ r3 initially has pointer to first entry 
+4094 -> Go to 40b8
+
+4098 -> Get byte at address r3 has
+409c-40a0 -> Go to 40b4 if it's not 0x02
+
+40a4 -> Get byte at 0x1 plus address r3 has
+40a8-40ac -> Go to 40b4 if it's not 0x00
+
+40b0 -> r8 = r8 + 1
+
+40b4 -> r3 = r3 + 0x1C
+
+40b8 -> Get byte at address r3 has
+40bc-40c0 -> Go to 4098 if it's not equal to 0x03
+
+40c4 -> r9 = r8
+^ r9 contains length of difficulty
+
+
+^40c8-411c is a loop for something
+
+40c8 -> r8 = 0
+40cc -> Go to 411c
+
+40d0 -> r0 = r7 + r8
+^ r8 is current level we are looking at, starting from zero
+40d4 -> r0 = r0 >> 3
+40d8 -> r0 = addze r0
+^ I think this puts carry bytes back in
+40dc -> r3 = r6 + r0
+40e0 -> Load byte at (r3+r0) and put it in r5
+^ Gets level progress byte that has current level we are looking at
+
+40e4 -> r4 = 1
+40e8 -> r3 = r7 + r8
+40ec -> r0 = (r3 `rotR` 3) & 0xE0000000
+40f0 -> r3 = (r3 `rotL` 1) & 0x00000001
+40f4 -> r0 = r0 - r3
+40f8 -> r0 = r0 `rotR` 3
+40fc -> r0 = r0 + r3
+^ 40ec-40fc -> r0 = (r0 & 0x7)
+4100 -> r0 = r4 << r0
+^ Basically, r0 = 1 << r0
+4104 -> r0 = r5 & r0
+4108-410c -> Go to 4118 if r0=0
+^ This checks if the bit for the level is set or not. This loops back if unset
+
+4110 -> r3 = 1
+^ r3 tells us whether the difficulty is unlocked
+4114 -> Go to 4174
+
+4118 -> r8 = r8 + 1
+
+411c -> Compare r8 and r9
+4120 -> Go to 40d0 if r8 < r9
+4124 -> Else, go to 4170
+
+^ 4128-416c is if r4 is non-zero at start
+^ It seems to check whether the level being looked at is unlocked! :3
+^ I made the code make r3 always 1, and it unlocks EVERYTHING! :33
+4128 -> r7 = r4 + r7
+412c -> r7 = r7 - 1
+^ r7 now is the bit index of level you are looking at
+4130 -> r0 = r7 >> 3
+4134 -> r0 =  addze r0
+4138 -> r3 = r6
+413c -> Load byte at address r3+r0 into r5
+4140 -> r4 = 1
+4144-4154 -> r0 = r7 & 0x7
+4158 -> r0 = 1 << r0
+415c -> r0 = r5 & r0
+4160-4164 -> Go to 4170 if r0 = 0
+
+4168-416c -> r3 = 1 then go to 4174
+
+
+4170 -> r3 = 0
+4174 -> blr
+
+
+
+
+^Conclusion: This level figures out whether a difficulty is unlocked; that is, has a level been played in a difficulty
+^ The 412
+
+
+
+

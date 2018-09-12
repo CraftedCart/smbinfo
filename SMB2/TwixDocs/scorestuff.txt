@@ -1,0 +1,97 @@
+
+Scores at continue screen
+805bca1c
+805be7d4
+8061f9e0
+
+Writes to 8061f940
+
+At ranking screen
+80622400
+806224fc
+
+After entering score
+80622558 (looks like ranking entry)
+80622648 (less like ranking entry)
+80629afc (more like ranking entry)
+
+
+70168
+
+Uhh, we found 8061f9e0 was used in func 8036c3e0.
+It seems to reference some unused table that tests the score with 50000,49000,48000,47000,46000.
+With initials NAG, @RI, SHO, SAK, A.V
+Ain't those the default initials in 1?
+Yup
+
+
+Before 80622400 is old scoreboard?
+
+
+Where is ranking stuff? Scores for first entry in Master
+8061c230 (main menu)
+8061d1d0 (main menu)
+80622318 (not)
+80629a0c (not)
+
+
+6th bit of bit field with bit for Master delineates Master scoreboard from Expert scoreboard
+
+Another trace of reading bit field
+After losing all lives
+8036c54c onward read 8th,27th,28th
+8038875c onward also read 8th, 27th, 28th
+808f6394 clears 29th bit
+808fb174 reads 31st
+808fb190 reads 27th
+8032f5f0 reads 29th
+So does 80912550, 25b4
+
+!!!!1!!!!11!!!11!1!1111!!1!1!1
+6th bit read at 808f6a08
+Same code reads 28th, 8th, and 6th again
+8038b4c0 reads 27th bit
+b4e8 and b504 read 27th and 6th
+b520 reads 6th
+b538 27th
+bb18,bb40,bb68 reads 8th,27th,28th
+80398920,895c,8974,8990,89a8 27th,27th,6th,6th,27th (looks like relevant code?)
+^ Called again (maybe text?)
+
+808f6a08
+808f6394 clears
+
+29th bit indicates continue screen?
+26th bit indicates name entry?
+
+Stuff about 808f6a08
+6914 loads value
+Then calls 8036c3e0 (wait a minute. This is SMB1 stuff! Don't care!)
+
+Stuff about 8038b4c0
+Reads value at b4b4
+Important!
+
+Stuff about 8038bb18
+Not important
+
+Stuff about 80398920
+Pretty much the same change needed as 8038b4c0
+
+
+Found another relevant read?
+8038d954 is more relevant code
+Same format it seems
+8038a398
+
+
+
+Important areas to change which ranking list is loaded and stored
+8038b4c0
+80398920
+8038d954
+8038a398
+
+
+
+

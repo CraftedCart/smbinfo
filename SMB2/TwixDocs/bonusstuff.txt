@@ -1,0 +1,5 @@
+
+176118 is where the bonus stage list is
+
+Function 80313c80
+Uses the bonus stage list at 803e6218 (176118) to check whether we are playing a bonus stage

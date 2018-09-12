@@ -1,0 +1,90 @@
+
+Function 80313ad8
+3ad8-3ae0 -> r0 = word [0x805d4914]
+3ae4-3ae8 -> Go to 3afc if r0 equals 0
+
+3aec-3af4 -> r3 = word [0x805d4948]
+^ Recall 805d4948 holds a notion of length of difficulty for unused difficulty slots
+3af8 -> Go to 3ba0
+
+3afc -> r6 = 0
+3b00 -> r5 = 0
+3b04 -> r0 = r4 & 0x00800000 (8th bit)
+3b08-3b0c -> Go to 3b18 if r0 = 0
+
+3b10 -> r5 = 7
+3b14 -> Go to 3b58
+
+3b18 -> r0 = r4 & 0x00000010 (27th bit)
+3b1c-3b20 -> Go to 3b2c if r0 = 0
+
+3b24 -> r5 = 6
+3b28 -> Go to 3b58
+
+3b2c -> r0 = r4 & 0x00000008 (28th bit)
+3b30-3b34 -> Go to 3b3c
+
+3b38 -> r5 = 3
+
+3b3c-3b44 -> r0 = word [0x805d4914]
+3b48-3b4c -> Go to 3b54 if r0 = 0
+
+3b50 -> r5 = 9
+
+3b54 -> r5 = r5 + r3
+
+3b58-3b68 -> r3 = first entry pointer for difficulty
+3b6c -> Go to 3b90
+
+3b70 -> r0 = byte [r3]
+3b74-3b78 -> Go to 3b8c if r0 != 2
+3b7c -> r0 = byte [r3+0x0001]
+3b80-3b84 -> Go to 3b8c if r0 != 0
+3b88 -> r6 = r6 + 1
+
+3b8c -> r3 = r3 + 0x1C
+3b90 -> r0 = byte [r3]
+3b94-3b98 -> Go to 3b70 if r0 != 3
+
+3b9c -> r3 = r6
+
+3ba0 -> blr
+
+^ Conclusion: Finds length of difficulty
+^ Input: r3,r4 -> Difficulty indicator
+^ Output: r3 -> The length of difficulty
+
+
+Function 80313e5c
+I looked at it and I know what it does
+Input:
+r3, r5 -> The difficulty
+r4 -> Level num - 1
+Output:
+r3, the stage id for level num
+r3 = 0 if level number is over difficulty
+Ex: r3,r5 indicates Beginner and r4 = 0 gives us r3 = 201
+
+
+Function 80313cc0
+3cc0-3cc4 -> r3 = 0x805d48f8
+3cc8 -> r4 = 0
+3ccc -> Go to 3e2c
+
+3cd0 -> r5 = r3 + 32
+3cd4 -> r0 = r4 << 3
+3cd8 -> r5 = r5 + r0
+3cdc -> r6 = word [r5+0x0004]
+3ce0 -> r0 = r4 << 3
+...
+
+^ Conclusion: Huh? Here are the things to change
+3d64-something loop
+3dc0, r6 = word [r5+0x0004]
+3df4, r0 = r5 + 28
+
+^^ Huh? 8047b32c is not an unused difficulty, but a remnant for Competition Mode?
+^^ 3dfc-3e2c, 3e38-3e54 are the culprits
+
+
+80902b8c is where the id is loaded from Competition Mode entries?

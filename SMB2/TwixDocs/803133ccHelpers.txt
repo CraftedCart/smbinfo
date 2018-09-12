@@ -1,0 +1,145 @@
+
+Note r3 holds current entry pointer at beginning of each function
+
+Function 80313660 (called when cm entry pointer is at value 00 00)
+3660-3668 -> Get word at 80553970 and put it in r0
+366c -> r0 = r0 & 0x00000001
+3670-3674 -> Go to 3690 if r0 not equal to zero
+
+3678-3680 -> Get word from 80553970 and put into r0
+3684 -> r0 = r0 & 0x00000200 (22nd bit)
+3688-368c -> Go to 3698 if r0 equal to zero
+
+3690 -> r3 = 1
+3694 -> Go to 3700
+
+3698-36a0 -> Get word at 80553970 and put in r0
+36a4 -> r0 = r0 & 0x00000040 (25th bit)
+36a8-36ac -> Go to 36c4 if r0 not equal to zero
+
+36b0-36b4 -> r3 = 8054dc40
+36b8 -> Get word from 8054dc68 and put in r0
+36bc-36c0 -> Go to 36fc if r0 is not equal to 0x01
+
+36c4-36cc -> Get word from 80553970 and put in r0
+36d0 -> r0 = r0 & 0x00000002 (30th bit)
+36d4-36d8 -> Go to 36f4 if r0 doesn't equal zero
+
+36dc-36e4 -> Get word from 80553970 and put in r0
+36e8 -> r0 = r0 & 0x00000004 (29th bit)
+36ec-36f0 -> Go to 36fc if r0 equals zero
+
+36f4-36f8 -> r3 = 1 and go to 3700
+
+36fc -> r3 = 0
+
+3700 -> blr
+
+^ This sets r3 based on the 80553970 bit field and partly because of 8054dc68 mystery word
+Short version: 
+^ Let c = word at 80553970, d = word at 8054dc68
+^ c[i] is the ith bit of it (0th is MSB)
+^ Returns one iff either of these are one
+^^ a1 = c[31]
+^^ a2 = c[22]
+^^ a3 = b & c[30]
+^^ a4 = b & c[29]
+
+where b = !c[25] => (d == 1)
+
+This function sets c[31] on goal entry! :3
+This is how we fix our code
+
+
+
+Function 8031376c (cm entry pointer sees 00 01) (I can't think of any entry that uses this)
+376c-3770 -> r4 = 80553970
+3774 -> r5 = halfword at 80553974 (sign extending to rest of register
+^ Uhhhh... this is the timer... whadda heck?
+3778 -> r0 = word at [r3 + 0x0004]
+377c -> r4 = MSB of r5
+3780 -> r3 = MSB of r0
+3784 -> r0 = r0 - r5 keeping track of carry
+3788 -> r3 = r3 + r4 + carry
+378c -> blr
+
+^ The carry will be one iff mystery time in entry <= current time left
+^ Conclusion: r3 = (entry's time < 0) + (current time left < 0) + (entry time < current time left)
+^ This returns one if the time in the entry is less than or equal to the current time. This allows for warps that trigger when you get to a goal fast enough
+
+
+
+^ This was called when I cleared a level with goal data
+Function 80313704 ( 00 02 ) ( Goal selector )
+3704-3708 -> r4 = 805bd980
+370c -> Load word at 805bd980 into r4
+^ When playing Beginner 1 on my figure mod, r4 = 80adae20
+3710 -> r4 = word [r4 + 0x000c]
+^ In trace, got r4 = 80ae3b20
+3714 -> r6 = word [r4 + 0x0048]
+^ In trace, got r4 = 80adb7cc
+
+3718 -> r5 = 0
+371c -> go to 373c
+
+3720-3724 -> r4 = 80553970
+3728 -> r0 = halfword at 8055397c
+372c-3730 -> Go to 3744 if r5 = r0
+3734 -> r5 = r5 + 1
+3738 -> r6 = r6 + (20=0x14)
+373c-3740 -> Go to 3720 if r5 < 3
+^This block basically does r6 = r6 + 20*(word at 8055397c), but if word is not between 0 and 2, we get r6 = r6 + 40
+
+3744-3748 -> r4 = byte [r6 + 0x0012], sign extended
+374c-3750 -> r0 = byte [r3 + 0x0007], sign extended
+
+3754-3764 -> r3 = 1 if r4 = r0, r3 = 0 if not
+
+3768 -> blr
+
+^ Conclusion: This function is probably checking if the goal entered is the goal that the entry pointer is at (00 02 is a goal selector)
+^ This is an insight to how 803133cc uses the result
+^ Traces seem to suggest that r4 after 3748 has the goal id entered
+
+
+Function 80313790 ( 01 00 ) ( Jump distance part )
+3790-3794 -> r4 = 8054dc40
+3798 -> r0 = word at 8054dc68
+379c-37a0 -> Go to 37ac if r0 is not 0x02
+
+37a4-37a8 -> r0=1 and go to 37c0
+
+37ac-37b8 -> r4 = byte at 805539a8, sign extended
+^ 805539a8 seems like goal entered
+37bc -> r0 = r4 + 1
+
+37c0-37c8 -> Store r0 into 805d4910
+37cc-37d4 -> r0 = halfword at 805bda0c
+^ Stage id
+37d8-37dc -> Go to 37f0 if stage id is not 334
+
+37e0 -> Load entry's jump distance for relevant goal into r0
+37e4-37ec -> Store jump distance into 805d4910
+
+^ Calculates jump distance
+^ If stage id isn't 334, just add 1 to goal id
+^^ Goal ids are 0 for blue, 1 for green, 2 for red
+^ If stage id is 334, get jump distance from entry
+
+
+^ It looks like 803133cc has a lot to do with jump distance
+
+
+Function 803137f4 ( 01 01 ) ( Probably unused )
+37f4-3800 -> Store -1 as halfword into 8055399E
+3804 -> blr
+
+Function 80313808 ( 01 02 )
+Does the same thing as 37f4! Stores -1 as halfword into 8055399E
+This is in last stage entries
+
+
+Mystery addresses
+80553970
+8054dc68
+805bd980

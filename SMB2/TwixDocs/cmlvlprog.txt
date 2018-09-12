@@ -1,0 +1,7 @@
+
+Functions that use level progress
+8031417c - Writes the corresponding bit for a level when we play it (at least in Challenge Mode)
+80313f24 - Finds out whether a level/difficulty is unlocked
+
+
+See levelprogress.txt for the functions

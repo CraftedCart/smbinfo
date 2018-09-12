@@ -1,0 +1,4 @@
+
+Offsets relative to where REL is loaded unless stated otherwise
+
+0x10 -> Holds address that stores a list of offsets

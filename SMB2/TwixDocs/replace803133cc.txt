@@ -1,0 +1,10 @@
+
+My simple 33cc works perfectly! Probably...
+
+We can't use helper space til we relocate 8031365c, which is just a blr :/
+It is called from jump table at 80446bd8. It's at 80446cd8. Let's find where it's being written...
+At 800104bc! :3
+
+
+Jump table entry when 33cc encounters 01 01 ... 804776a4
+Table entry for 800104bc that writes it... 80537964, 2c7864 in REL

@@ -1,0 +1,23 @@
+
+
+80902760 loads 8054dc40
+80902774 loads 8054dcac
+
+
+Memory for 80902768 (zeroed out addresses)
+
+Seems to be loaded at 808f3fe0 just like main game
+
+Table entry to search
+XXXX0606
+00001360
+00040406
+00001360
+00100606
+000013cc
+00040406
+000013cc
+
+
+Seems like the first table entry is 0x3d4c7
+First overwrite address is 808f40b8

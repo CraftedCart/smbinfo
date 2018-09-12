@@ -1,0 +1,65 @@
+
+-- Vanilla Challenge Mode Entries --
+
+An entry is made up of a list of pieces of information. The pieces of information form if then statements.
+Here is the format for a piece of information:
+MMNN0000
+VVVVVVVV
+[5 zero words]
+
+If MM is zero, this is an if clause
+NN = 0 means "if we entered a goal" (func 80313660)
+NN = 1 means roughly "if the current time is greater than or equal to VVVVVVVV" (func 8031376c)
+NN = 2 means "if we entered goal with id VVVVVVVV" (func 80313704)
+The if clause chain together
+
+If MM is one, this is a then clause
+NN = 0 means "calculate jump distance" (func 80313790)
+^ If stage id is 334, the jump distance is VVVVVVVV; otherwise, it's one plus the goal id
+NN = 1 and NN = 2 means "do end of difficulty stuff" (func 803137f4 and func 80313808 respectively)
+
+If MM is two, this is a special type of info
+If NN = 0, this specifies the id through VVVVVVVV. This is always in an cm entry and must be the first piece of information
+If NN = 1, this specifies the time allotted throught VVVVVVVV. This doesn't need to be here, but if it is, it must be the second piece of information
+
+Examples:
+
+Melting Pot, with slight modification
+02000000
+00000107  % Stage id
+[5 zero words]
+02010000
+00000708  % Time is 30 seconds = 1800 units
+[5 zero words]
+00000000
+00000000  % If we entered goal...
+[5 zero words]
+01000000
+00000005  % Since stage id is not 334, we add one plus the goal id. Since there is only a blue goal, which has id 0, the jump distance is one, and not five, despite what the entry suggests
+[5 zero words]
+
+Planets, but Red warps to Nintendo
+02000000
+0000014e
+[5 zero words]
+00000000
+00000000  % If we entered goal...
+[5 zero words]
+00020000
+00000000  % And goal id is zero; that is, blue goal...
+[5 zero words]
+01000000
+00000001  % Then warp one
+[5 zero words]
+00000000
+00000000  % If we entered goal...
+[5 zero words]
+00020000
+00000002  % And goal id is two; that is, red goal...
+[5 zero words]
+01000000
+00000006  % Then warp six. It doesn't warp the standard three since the stage id is 334
+[5 zero words]
+
+
+We call a jump distance slot the slots where the jump distance is computed from the entry and not by the goal id. In vanilla SMB2, 334 is the only jump distance slot. My cmmod program can modify what slots are jump distance slots.
